@@ -1,5 +1,7 @@
 **Retail Performance Optimization & Predictive Sales Analysis**
 
+**Live Project Website:** https://aslmazrta5mpelk8fev3yr.streamlit.app
+
 ### Project Overview
 This project conducts a comprehensive Exploratory Data Analysis (EDA) on multi-year retail operational data to isolate key profitability bottlenecks across regional markets and evaluate systemic shipping delay impacts. Additionally, a Scikit-Learn predictive sales forecasting model was implemented to isolate volatile seasonal fluctuations and establish a steady growth baseline for inventory planning workflows.
 
