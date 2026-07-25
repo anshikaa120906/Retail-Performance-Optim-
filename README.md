@@ -18,4 +18,4 @@ Interactive Streamlit web application showcasing Exploratory Data Analysis (EDA)
 ### **Core Analytical Findings**
 * **Regional Profitability Bottlenecks:** Analysis revealed that while the Central region generates substantial sales volume ($501,239.89), its net profit margins are heavily constrained ($39,706.36) relative to optimized markets like the West region ($108,418.45).
 * **Shipping Delay Impact Dynamics:** Quantified average logistical delays across distribution tracks, confirming that Standard Class shipping introduces a systematic 5.0-day operational lag compared to expedited First Class (2.1 days) and Same Day tracks.
-* **Predictive Growth Modeling:** Engineered a Random Forest Regression model and interactive simulator to forecast expected transaction profit in real-time based on sales volume, applied discounts, and item quantity.
+* **Predictive Growth Modeling:** Engineered a Random Forest Regression model and interactive simulator to forecast expected transaction profit in real-time based on sales volume, applied discounts and item quantity.
