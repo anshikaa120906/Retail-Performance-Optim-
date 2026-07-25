@@ -66,7 +66,7 @@ try:
     
     st.markdown("---")
     
-    tab1, tab2, tab3 = st.tabs(["📈 Profitability Analysis", "🤖 Sales Baseline & What-If", "📋 Raw Data & Export"])
+    tab1, tab2, tab3 = st.tabs(["📈 Profitability Analysis", "🤖 Sales Baseline & What-If", "📋 Raw Data & Search"])
     
     with tab1:
         st.subheader("Regional Profitability Breakdown")
@@ -82,6 +82,20 @@ try:
         )
         fig_profit.update_layout(template="plotly_dark", showlegend=False)
         st.plotly_chart(fig_profit, use_container_width=True)
+        
+        st.markdown("#### 🚚 Profitability by Category & Segment")
+        segment_profit = filtered_df.groupby(["Category", "Segment"])["Profit"].sum().reset_index()
+        fig_segment = px.bar(
+            segment_profit,
+            x="Category",
+            y="Profit",
+            color="Segment",
+            barmode="group",
+            title="Segment Profit Distribution Across Categories",
+            color_discrete_sequence=px.colors.qualitative.Bold
+        )
+        fig_segment.update_layout(template="plotly_dark")
+        st.plotly_chart(fig_segment, use_container_width=True)
         
         st.markdown("#### ⚠️ High-Risk Profit Loss Alert")
         loss_threshold = st.number_input("Filter Unprofitable Transactions Below ($):", value=-500)
@@ -115,9 +129,41 @@ try:
         simulated_sales = total_sales * (1 + growth_rate / 100)
         st.metric("Projected Total Revenue", f"${simulated_sales:,.2f}", delta=f"{growth_rate}% Growth")
 
+        st.markdown("---")
+        st.markdown("#### 📑 Summary Report Generation")
+        summary_text = f"""RETAIL PERFORMANCE EXECUTIVE SUMMARY
+-------------------------------------
+Total Sales Volume: ${total_sales:,.2f}
+Net Profit Margin: ${total_profit:,.2f}
+Total Orders Processed: {total_orders:,}
+
+Key Takeaways:
+- Regional performance evaluated across active filters.
+- Trend line baseline tracks growth at scale through volatility.
+"""
+        st.download_button(
+            label="📄 Download Summary Report (.txt)",
+            data=summary_text,
+            file_name="executive_summary.txt",
+            mime="text/plain"
+        )
+
     with tab3:
         st.subheader("Dataset Inspector & Export")
         
+        st.markdown("#### 🔎 Quick Order Search")
+        search_query = st.text_input("Search by Product Name or Order ID:")
+        if search_query:
+            search_results = filtered_df[
+                filtered_df["Product Name"].astype(str).str.contains(search_query, case=False) |
+                filtered_df["Order ID"].astype(str).str.contains(search_query, case=False)
+            ]
+            st.dataframe(search_results, use_container_width=True)
+        else:
+            st.dataframe(filtered_df.head(100), use_container_width=True)
+            st.caption("Showing first 100 rows based on active filters.")
+
+        st.markdown("---")
         csv_data = filtered_df.to_csv(index=False).encode('utf-8')
         st.download_button(
             label="📥 Export Filtered Data to CSV",
@@ -125,9 +171,6 @@ try:
             file_name="filtered_retail_data.csv",
             mime="text/csv"
         )
-        
-        st.dataframe(filtered_df.head(100), use_container_width=True)
-        st.caption("Showing first 100 rows based on active filters.")
 
     st.sidebar.markdown("---")
     st.sidebar.info("Developed by **Anshika** | Powered by Streamlit & Plotly")
