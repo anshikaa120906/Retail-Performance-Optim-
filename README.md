@@ -3,7 +3,9 @@
 **Live Project Website:** https://aslmazrta5mpelk8fev3yr.streamlit.app
 ### Strategic Business Recommendations
 **Margin Optimization:** Re-evaluate fulfillment and discounting strategies in the Central region to fix current profit constraints ($39.7k profit vs. $501.2k sales volume).
+
 **Shipping SLA Alignment:** Incentivize expedited shipping (First Class / Same Day) for high-ticket orders to mitigate the systematic 5.0-day operational transit delay observed in Standard Class.
+
 **Category Focus:** Prioritize inventory allocation toward high-margin categories identified in the interactive breakdown to maximize net profitability.
 
 ### Project Overview
