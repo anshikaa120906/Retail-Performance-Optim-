@@ -8,6 +8,21 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+    <style>
+    div[data-testid="stMetric"] {
+        background-color: #1E222D;
+        border: 1px solid #2B303C;
+        padding: 15px;
+        border-radius: 10px;
+    }
+    button[data-baseweb="tab"] {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 st.title("📊 Retail Performance & Predictive Analytics Dashboard")
 st.markdown("An interactive web application showcasing Exploratory Data Analysis (EDA) and predictive sales insights.")
 
@@ -20,13 +35,23 @@ try:
     df = load_data()
     
     st.sidebar.header("Filter Options")
+    
     regions = st.sidebar.multiselect(
         "Select Regions to View:",
         options=df["Region"].unique(),
         default=df["Region"].unique()
     )
     
-    filtered_df = df[df["Region"].isin(regions)]
+    categories = st.sidebar.multiselect(
+        "Select Product Categories:",
+        options=df["Category"].unique(),
+        default=df["Category"].unique()
+    )
+    
+    filtered_df = df[
+        (df["Region"].isin(regions)) & 
+        (df["Category"].isin(categories))
+    ]
     
     st.markdown("### Core Operational Metrics")
     col1, col2, col3 = st.columns(3)
@@ -41,7 +66,7 @@ try:
     
     st.markdown("---")
     
-    tab1, tab2, tab3 = st.tabs(["📈 Profitability Analysis", "🤖 Sales Baseline", "📋 Raw Data Preview"])
+    tab1, tab2, tab3 = st.tabs(["📈 Profitability Analysis", "🤖 Sales Baseline", "📋 Raw Data & Export"])
     
     with tab1:
         st.subheader("Regional Profitability Breakdown")
@@ -75,9 +100,18 @@ try:
         st.plotly_chart(fig_sales, use_container_width=True)
 
     with tab3:
-        st.subheader("Dataset Inspector")
+        st.subheader("Dataset Inspector & Export")
+        
+        csv_data = filtered_df.to_csv(index=False).encode('utf-8')
+        st.download_button(
+            label="📥 Export Filtered Data to CSV",
+            data=csv_data,
+            file_name="filtered_retail_data.csv",
+            mime="text/csv"
+        )
+        
         st.dataframe(filtered_df.head(100), use_container_width=True)
-        st.caption("Showing first 100 rows based on selected regional filters.")
+        st.caption("Showing first 100 rows based on active filters.")
 
 except Exception as e:
     st.error(f"Error loading dataset: {e}")
