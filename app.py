@@ -196,7 +196,7 @@ Critical Loss Anomalies Detected: {len(anomalies)}
         )
 
     st.sidebar.markdown("---")
-    st.sidebar.info("Developed by **Anshika** | TYCS Final Year Project")
+    st.sidebar.caption("Developed by Anshika Mishra")
 
 except Exception as e:
     st.error(f"Error executing dashboard: {e}")
