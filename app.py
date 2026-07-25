@@ -66,7 +66,7 @@ try:
     
     st.markdown("---")
     
-    tab1, tab2, tab3 = st.tabs(["📈 Profitability Analysis", "🤖 Sales Baseline", "📋 Raw Data & Export"])
+    tab1, tab2, tab3 = st.tabs(["📈 Profitability Analysis", "🤖 Sales Baseline & What-If", "📋 Raw Data & Export"])
     
     with tab1:
         st.subheader("Regional Profitability Breakdown")
@@ -82,6 +82,16 @@ try:
         )
         fig_profit.update_layout(template="plotly_dark", showlegend=False)
         st.plotly_chart(fig_profit, use_container_width=True)
+        
+        st.markdown("#### ⚠️ High-Risk Profit Loss Alert")
+        loss_threshold = st.number_input("Filter Unprofitable Transactions Below ($):", value=-500)
+        loss_df = filtered_df[filtered_df["Profit"] < loss_threshold]
+
+        if not loss_df.empty:
+            st.warning(f"Detected {len(loss_df)} critical loss-making transactions exceeding ${abs(loss_threshold)}.")
+            st.dataframe(loss_df[["Order ID", "Product Name", "Sales", "Profit", "Discount"]], use_container_width=True)
+        else:
+            st.success("No critical loss-making orders found under selected threshold.")
         
     with tab2:
         st.subheader("Predictive Growth Trend Baseline")
@@ -99,6 +109,12 @@ try:
         fig_sales.update_layout(template="plotly_dark")
         st.plotly_chart(fig_sales, use_container_width=True)
 
+        st.markdown("---")
+        st.markdown("#### 🎛️ Interactive Growth Scenario Simulator")
+        growth_rate = st.slider("Simulated Regional Sales Growth (%)", min_value=-20, max_value=50, value=10, step=5)
+        simulated_sales = total_sales * (1 + growth_rate / 100)
+        st.metric("Projected Total Revenue", f"${simulated_sales:,.2f}", delta=f"{growth_rate}% Growth")
+
     with tab3:
         st.subheader("Dataset Inspector & Export")
         
@@ -112,6 +128,9 @@ try:
         
         st.dataframe(filtered_df.head(100), use_container_width=True)
         st.caption("Showing first 100 rows based on active filters.")
+
+    st.sidebar.markdown("---")
+    st.sidebar.info("Developed by **Anshika** | Powered by Streamlit & Plotly")
 
 except Exception as e:
     st.error(f"Error loading dataset: {e}")
