@@ -26,7 +26,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.title("📊 Retail Performance & Predictive Analytics Engine")
-st.markdown("An advanced analytics platform featuring automated anomaly detection, live ML prediction, and business performance metrics.")
+st.markdown("An advanced analytics platform featuring automated anomaly detection, live ML prediction and business performance metrics.")
 
 @st.cache_data
 def load_data():
